@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render
 
 from ice_cream.models import IceCream
@@ -11,9 +12,8 @@ def index(request):
         'title',
         'description'
     ).filter(
-        is_published=True,
-        is_on_main=True
-    )
+        Q(is_published=True) & (Q(is_on_main=True) | Q(title__contains='пломбир'))
+        )
     # Полученный из БД QuerySet передаём в словарь контекста:
     context = {
         'ice_cream_list': ice_cream_list,
